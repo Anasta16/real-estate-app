@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function Header() {
 
+    const logo = "https://static.rdc.moveaws.com/images/logos/rdc-logo-default.svg";
+
     const location = useLocation();
     const navigate = useNavigate();
     
@@ -17,7 +19,7 @@ export default function Header() {
         <header className="flex justify-between items-center px-3 max-w-6xl mx-auto">
             <div>
                 <img 
-                    src="https://static.rdc.moveaws.com/images/logos/rdc-logo-default.svg" 
+                    src={logo} 
                     alt="logo" 
                     className="h-5 cursor-pointer"
                     onClick={() => navigate("/")}
