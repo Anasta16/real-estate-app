@@ -4,18 +4,21 @@ import { toast } from 'react-toastify';
 import { collection, getDocs, limit, orderBy, query, startAfter, where } from 'firebase/firestore';
 import { db } from '../firebase';
 import ListingItem from '../components/ListingItem';
+import { useParams } from 'react-router-dom';
 
-export default function Offers() {
+export default function Category() {
 
   const [listings, setListings] = useState(null);
   const [loading, setLoading] = useState(true);
   const [lastFetchedListing, setLastFetchedListing] = useState(null);
 
+  const params = useParams();
+
   useEffect(() => {
     async function fetchListings() {
       try {
         const listingRef = collection(db, "listings");
-        const q = query(listingRef, where("offer", "==", true), orderBy("timestamp", "desc"), limit(8));
+        const q = query(listingRef, where("type", "==", params.categoryName), orderBy("timestamp", "desc"), limit(8));
         const querySnap = await getDocs(q);
         const lastVisible = querySnap.docs[querySnap.docs.length - 1];
         setLastFetchedListing(lastVisible)
@@ -34,12 +37,12 @@ export default function Offers() {
     }
  
     fetchListings();
-  }, []);
+  }, [params.categoryName]);
 
   async function onFetchMoreListings() {
     try {
       const listingRef = collection(db, "listings");
-      const q = query(listingRef, where("offer", "==", true), orderBy("timestamp", "desc"), startAfter(lastFetchedListing), limit(4));
+      const q = query(listingRef, where("type", "==", params.categoryName), orderBy("timestamp", "desc"), startAfter(lastFetchedListing), limit(4));
       const querySnap = await getDocs(q);
       const lastVisible = querySnap.docs[querySnap.docs.length - 1];
       setLastFetchedListing(lastVisible)
@@ -74,7 +77,9 @@ export default function Offers() {
           mb-6
         "
       >
-        Offers
+        {
+            params.categoryName === "rent" ? "Places for rent" : "Places for sale"
+        }
       </h1>
       {
         loading ? (
