@@ -212,7 +212,7 @@ export default function Home() {
             >
               Places for sale
             </h2>
-            <Link to="/category/rent">
+            <Link to="/category/sale">
               <p
                 className="
                   px-3
